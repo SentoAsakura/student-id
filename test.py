@@ -2,8 +2,7 @@ import cv2
 from pyzbar.pyzbar import decode
 import numpy as np
 
-if __name__ == '__main__':
-    fo = open('shit.txt','a')
+#fo = open('shit.txt','a')
 
 
 cam = cv2.VideoCapture(0)
@@ -18,13 +17,15 @@ while True:
     cv2.imshow('frame',frame)
 
     key = cv2.waitKey(1)
+    fo = open('shit.txt','a')
     
     if key == 13:
         data=code.data.decode('utf-8')
-        print('A:',data)
-        if __name__ == '__main__': fo.write(data)
+        fo.writelines(str(data)+'\n')
+        fo.close()
     if key==113:
         break
-
 cam.release()
 cv2.destroyAllWindows()
+
+
