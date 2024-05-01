@@ -1,4 +1,6 @@
 import qrcode
-
-myqr = qrcode.make("1902275574")
-myqr.save("myqr.png")
+class QR:
+    def Create(data):
+        
+        myqr = qrcode.make(str(data))
+        myqr.save("myqr.png")
