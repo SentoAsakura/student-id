@@ -4,28 +4,30 @@ import numpy as np
 
 #fo = open('shit.txt','a')
 
-
-cam = cv2.VideoCapture(0)
-while True:
-    ret,frame = cam.read()
-    for code in decode(frame):
-        pts = np.array([code.polygon],np.int32)
-        pts = pts.reshape((-1,1,2))
-        cv2.polylines(frame,[pts],True,(0,255,255),3)
-        #print(code)
+class Reader:
     
-    cv2.imshow('frame',frame)
+    def read():
+        cam = cv2.VideoCapture(0)
+        while True:
+            ret,frame = cam.read()
+            for code in decode(frame):
+                pts = np.array([code.polygon],np.int32)
+                pts = pts.reshape((-1,1,2))
+                cv2.polylines(frame,[pts],True,(0,255,255),3)
+                #print(code)
+            
+            cv2.imshow('frame',frame)
 
-    key = cv2.waitKey(1)
-    fo = open('shit.txt','a')
-    
-    if key == 13:
-        data=code.data.decode('utf-8')
-        fo.writelines(str(data)+'\n')
-        fo.close()
-    if key==113:
-        break
-cam.release()
-cv2.destroyAllWindows()
+            key = cv2.waitKey(1)
+            fo = open('shit.txt','a')
+            
+            if key == 13:
+                data=code.data.decode('utf-8')
+                fo.writelines(str(data)+'\n')
+                fo.close()
+            if key==113:
+                break
+        cam.release()
+        cv2.destroyAllWindows()
 
 
