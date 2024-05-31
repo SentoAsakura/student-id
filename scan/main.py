@@ -9,7 +9,9 @@ print('''
 while True:
     match input('Choose one of those option:'):
         case '1':
-            Reader.read()
+            a = Reader
+            a.read(a)
+            print(a.data)
         case '2':
             qrscanner.QR.Create(input())
         case '3':

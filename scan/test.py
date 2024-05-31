@@ -5,8 +5,10 @@ import numpy as np
 #fo = open('shit.txt','a')
 
 class Reader:
+    def __init__(self):
+        self.data
     
-    def read():
+    def read(self):
         cam = cv2.VideoCapture(0)
         while True:
             ret,frame = cam.read()
@@ -23,11 +25,13 @@ class Reader:
             
             if key == 13:
                 data=code.data.decode('utf-8')
+                self.data = str(data)
                 fo.writelines(str(data)+'\n')
                 fo.close()
             if key==113:
                 break
         cam.release()
         cv2.destroyAllWindows()
+
 
 
