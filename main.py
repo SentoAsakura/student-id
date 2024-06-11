@@ -28,60 +28,54 @@ class MainApp(App):
         self.img1.fit_mode = 'cover'
         self.img1.size = self.img1.width, 640
         camera = FloatLayout(size = (480,640))
+        self.camera = camera
         camera.add_widget(self.img1, len(camera.children))
-        self.button1 = Button(
-            text = 'a',
-            size_hint= (.25,.15),
-            valign = 'center',x = '120',
-            )
-        camera.add_widget(self.button1,0)
         
         
 
         self.capture = cv2.VideoCapture(0)
         #cv2.namedWindow("CV2 Image")
         Clock.schedule_interval(self.update, 1.0/33.0)
+        Clock.schedule_interval(self.read, 1)
+        
         return camera
     def update(self,*args):
-        ret,self.frame = self.capture.read()
-        for code in decode(self.frame):
+        ret,frame = self.capture.read()
+        for code in decode(frame):
             pts = np.array([code.polygon],np.int32)
             pts = pts.reshape((-1,1,2))
-            cv2.polylines(self.frame,[pts],True,(0,255,255),3)
-            self.code = code
-            #print(code)
+            cv2.polylines(frame,[pts],True,(0,255,255),3)
+        #     self.code = code
+            #print(self.code)
             
         #cv2.imshow('CV2 Image',frame)
 
-        buf1 = cv2.flip(self.frame, 0)
+        buf1 = cv2.flip(frame, 0)
         buf = buf1.tostring()
-        texture1 = Texture.create(size=(self.frame.shape[1], self.frame.shape[0]), colorfmt='bgr') 
+        texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr') 
 
         texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
         self.img1.texture = texture1
+
+
+    def read(self, *args):
+        ret,frame = self.capture.read()
+        for code in decode(frame):
+            # pts = np.array([code.polygon],np.int32)
+            # pts = pts.reshape((-1,1,2))
+            # cv2.polylines(frame,[pts],True,(0,255,255),3)
+            #print(self.code)
+            self.data = code.data.decode('utf-8')
+            print(self.data)
+
+        
     
-    def read(self):
-        #for code in decode(self.frame):
-            #pts = np.array([code.polygon],np.int32)
-            #pts = pts.reshape((-1,1,2))
-            #cv2.polylines(self.frame,[pts],True,(0,255,255),3)
-            #print(code)
-
-        data=self.code.data.decode('utf-8')
-        def to_claim_their_bones(data):
-            output = open("shit.txt")
-            output.writelines(data,'a')
-            print(data)
-            output.close()
+    
+    
+    
         
-        self.button1.bind(on_press = to_claim_their_bones(data))
-        
-        
-
-
-
-
+    
 if __name__ == '__main__':
     MainApp().run()
     cv2.destroyAllWindows()
