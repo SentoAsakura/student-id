@@ -43,30 +43,33 @@ class MainApp(App):
         Clock.schedule_interval(self.update, 1.0/33.0)
         return camera
     def update(self,*args):
-        ret,frame = self.capture.read()
-        for code in decode(frame):
+        ret,self.frame = self.capture.read()
+        for code in decode(self.frame):
             pts = np.array([code.polygon],np.int32)
             pts = pts.reshape((-1,1,2))
-            cv2.polylines(frame,[pts],True,(0,255,255),3)
+            cv2.polylines(self.frame,[pts],True,(0,255,255),3)
+            self.code = code
             #print(code)
             
         #cv2.imshow('CV2 Image',frame)
 
-        buf1 = cv2.flip(frame, 0)
+        buf1 = cv2.flip(self.frame, 0)
         buf = buf1.tostring()
-        texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr') 
+        texture1 = Texture.create(size=(self.frame.shape[1], self.frame.shape[0]), colorfmt='bgr') 
 
         texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
         self.img1.texture = texture1
+    
+    def read(self):
+        #for code in decode(self.frame):
+            #pts = np.array([code.polygon],np.int32)
+            #pts = pts.reshape((-1,1,2))
+            #cv2.polylines(self.frame,[pts],True,(0,255,255),3)
+            #print(code)
 
-        def read():
-            data=code.data.decode('utf-8')
-            return data
-
-        self.button1.bind(
-            on_press = print(read())
-        )
+        data=self.code.data.decode('utf-8')
+        self.button1.bind(on_press = print(data))
         
         
 
