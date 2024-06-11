@@ -69,7 +69,13 @@ class MainApp(App):
             #print(code)
 
         data=self.code.data.decode('utf-8')
-        self.button1.bind(on_press = print(data))
+        def to_claim_their_bones(data):
+            output = open("shit.txt")
+            output.writelines(data,'a')
+            print(data)
+            output.close()
+        
+        self.button1.bind(on_press = to_claim_their_bones(data))
         
         
 
