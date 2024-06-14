@@ -28,7 +28,6 @@ class MainApp(App):
         self.img1.fit_mode = 'cover'
         self.img1.size = self.img1.width, 640
         camera = FloatLayout(size = (480,640))
-        self.camera = camera
         camera.add_widget(self.img1, len(camera.children))
         
         
@@ -37,6 +36,13 @@ class MainApp(App):
         #cv2.namedWindow("CV2 Image")
         Clock.schedule_interval(self.update, 1.0/33.0)
         Clock.schedule_interval(self.read, 1)
+        # self.button1 = Button(
+        #     text = 'aA',
+        #     size_hint= (.25,.15),
+        #     valign = 'center',x = '120',
+        #     )
+        # self.button1.bind(on_press = self.read)
+        # camera.add_widget(self.button1)
         
         return camera
     def update(self,*args):
