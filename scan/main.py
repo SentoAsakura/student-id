@@ -1,5 +1,5 @@
 import qrscanner
-from test import Reader
+from check import Reader
 
 print('''
 1. Open Scanner

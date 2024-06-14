@@ -9,6 +9,10 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 
+from check import logTime
+
+
+
 Config.set('graphics', 'resizable', '0')
 Config.set('graphics', 'width', '480')
 Config.set('graphics', 'height', '640')
@@ -36,6 +40,9 @@ class MainApp(App):
         #cv2.namedWindow("CV2 Image")
         Clock.schedule_interval(self.update, 1.0/33.0)
         Clock.schedule_interval(self.read, 1)
+
+        #Only for emergency situation
+
         # self.button1 = Button(
         #     text = 'aA',
         #     size_hint= (.25,.15),
@@ -66,6 +73,8 @@ class MainApp(App):
 
 
     def read(self, *args):
+        status = f'{logTime().hour}:{logTime().min}   {logTime().state}'
+        file = open('shit.txt','a',encoding='utf-8')
         ret,frame = self.capture.read()
         for code in decode(frame):
             # pts = np.array([code.polygon],np.int32)
@@ -74,6 +83,8 @@ class MainApp(App):
             #print(self.code)
             self.data = code.data.decode('utf-8')
             print(self.data)
+            file.writelines(f'{str(self.data)} {status} \n')
+
 
         
     
