@@ -7,9 +7,12 @@ from kivy.clock import Clock
 from kivy.graphics.texture import Texture
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
+from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.uix.button import Button
 
 from check import logTime
+
 
 
 
@@ -23,16 +26,39 @@ from pyzbar.pyzbar import decode
 import numpy as np
 
 
-class MainWidget(Widget):
-    pass
-
 class MainApp(App):
     def build(self):
         self.img1 = Image()
         self.img1.fit_mode = 'cover'
         self.img1.size = self.img1.width, 640
-        camera = FloatLayout(size = (480,640))
-        camera.add_widget(self.img1, len(camera.children))
+
+        self.reader = FloatLayout()
+        self.reader.add_widget(self.img1)
+
+        
+
+        camera1 = ScreenManager()
+        self.camera1 = camera1
+        
+        def Switch(instance,*args):
+            self.camera1.current = instance.text
+            return Switch
+
+        self.S2 = Screen(name = 'Log')
+        logScreen = AnchorLayout()
+        log = Label(text = self.logs())
+        logScreen.add_widget(Button(text= 'camera',size_hint = (.15,.15), on_press = Switch))
+        logScreen.add_widget(log)
+        self.S2.add_widget(logScreen)
+            
+        
+        
+        camera1.add_widget(self.S2)
+        self.reader.add_widget(Button(text = "Log",size_hint = (.25,.15),on_press = Switch))
+        self.S1 = Screen(name = 'camera')
+        self.S1.add_widget(self.reader)
+        camera1.add_widget(self.S1)
+        camera1.current = 'camera'
         
         
 
@@ -40,18 +66,17 @@ class MainApp(App):
         #cv2.namedWindow("CV2 Image")
         Clock.schedule_interval(self.update, 1.0/33.0)
         Clock.schedule_interval(self.read, 1)
+        Clock.schedule_interval(self.logs, 1.0/33.0)
 
         #Only for emergency situation
 
-        # self.button1 = Button(
-        #     text = 'aA',
-        #     size_hint= (.25,.15),
-        #     valign = 'center',x = '120',
+        # self.button1 = Label(
+        #     text = log,
         #     )
         # self.button1.bind(on_press = self.read)
         # camera.add_widget(self.button1)
         
-        return camera
+        return camera1
     def update(self,*args):
         ret,frame = self.capture.read()
         for code in decode(frame):
@@ -84,6 +109,13 @@ class MainApp(App):
             self.data = code.data.decode('utf-8')
             print(self.data)
             file.writelines(f'{str(self.data)} {status} \n')
+            file.close()
+    def logs(self,*args):
+        filein = open('shit.txt','r',encoding='utf-8')
+        res = filein.read()
+        filein.close()
+        return res
+        
 
 
         
