@@ -10,6 +10,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.uix.button import Button
+from kivy.uix.behaviors.button import ButtonBehavior
 
 from check import logTime
 
@@ -24,6 +25,15 @@ Config.set('graphics', 'height', '640')
 import cv2
 from pyzbar.pyzbar import decode
 import numpy as np
+
+class LogButton(ButtonBehavior,Image):
+    def __init__(self, **kwargs):
+        super(LogButton,self).__init__(**kwargs)
+        self.source = 'source\Log.png'
+class CamButton(ButtonBehavior,Image):
+    def __init__(self, **kwargs):
+        super(CamButton,self).__init__(**kwargs)
+        self.source = 'source\camera.png'
 
 
 class MainApp(App):
@@ -41,20 +51,34 @@ class MainApp(App):
         self.camera1 = camera1
         
         def Switch(instance,*args):
-            self.camera1.current = instance.text
+
+            state = ''
+            match instance.source:
+                case 'source\Log.png':
+                    state = 'Log'
+                case 'source\camera.png':
+                    state = 'camera'
+
+            self.camera1.current = state
+            transition = ""
+            if state == 'Log':
+                transition = 'up'
+            else:
+                transition = 'down'
+            self.camera1.transition.direction = transition
             return Switch
 
         self.S2 = Screen(name = 'Log')
-        logScreen = AnchorLayout()
+        logScreen = AnchorLayout(anchor_x = 'left', anchor_y='bottom')
         log = Label(text = self.logs())
-        logScreen.add_widget(Button(text= 'camera',size_hint = (.15,.15), on_press = Switch))
+        logScreen.add_widget(CamButton(size_hint = (.15,.15), on_press = Switch))
         logScreen.add_widget(log)
         self.S2.add_widget(logScreen)
             
         
         
         camera1.add_widget(self.S2)
-        self.reader.add_widget(Button(text = "Log",size_hint = (.25,.15),on_press = Switch))
+        self.reader.add_widget(LogButton(size_hint = (.15,.15),on_press = Switch))
         self.S1 = Screen(name = 'camera')
         self.S1.add_widget(self.reader)
         camera1.add_widget(self.S1)
