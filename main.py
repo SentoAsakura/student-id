@@ -123,7 +123,7 @@ class MainApp(App):
 
     def read(self, *args):
         status = f'{logTime().hour}:{logTime().min}   {logTime().state}'
-        file = open('shit.txt','a',encoding='utf-8')
+        file = open('log.txt','a',encoding='utf-8')
         ret,frame = self.capture.read()
         for code in decode(frame):
             # pts = np.array([code.polygon],np.int32)
@@ -135,7 +135,7 @@ class MainApp(App):
             file.writelines(f'{str(self.data)} {status} \n')
             file.close()
     def logs(self,*args):
-        filein = open('shit.txt','r',encoding='utf-8')
+        filein = open('log.txt','r',encoding='utf-8')
         res = filein.read()
         filein.close()
         return res
