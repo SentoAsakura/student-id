@@ -7,6 +7,7 @@ from kivy.clock import Clock
 from kivy.graphics.texture import Texture
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.uix.button import Button
@@ -49,6 +50,7 @@ class MainApp(App):
 
         camera1 = ScreenManager()
         self.camera1 = camera1
+        self.log = []
         
         def Switch(instance,*args):
 
@@ -70,10 +72,13 @@ class MainApp(App):
 
         self.S2 = Screen(name = 'Log')
         logScreen = AnchorLayout(anchor_x = 'left', anchor_y='bottom')
-        log = Label(text = self.logs())
+        #log = Label(text = self.logs())
         logScreen.add_widget(CamButton(size_hint = (.15,.15), on_press = Switch))
-        logScreen.add_widget(log)
+        #logScreen.add_widget(log)
+        self.logScreen2 = BoxLayout(orientation='vertical')
+        
         self.S2.add_widget(logScreen)
+        self.S2.add_widget(self.logScreen2)
             
         
         
@@ -134,6 +139,14 @@ class MainApp(App):
             print(self.data)
             file.writelines(f'{str(self.data)} {status} \n')
             file.close()
+            self.log.insert(0,self.data)
+            self.log = self.log[:5]
+            
+            self.logScreen2.add_widget(Label(text =self.log[0],size_hint = (1,.15)))
+            
+
+            
+            
     def logs(self,*args):
         filein = open('log.txt','r',encoding='utf-8')
         res = filein.read()
