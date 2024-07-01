@@ -25,7 +25,10 @@ def find_n_update(id:int):
 
 def history():
     his_cursor = connection.cursor()
-    his_cursor.execute("SELECT * FROM student ORDER BY time DESC LIMIT 5")
+    his_cursor.execute("SELECT * FROM history ORDER BY time DESC LIMIT 5")
     items = his_cursor.fetchall()
     for item in items:
         print(f'{item[1]} {item[2]}')
+
+# find_n_update(1)
+# history()
