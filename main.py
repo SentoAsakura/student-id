@@ -9,7 +9,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.screenmanager import ScreenManager,Screen, SlideTransition
+from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.uix.button import Button
 from kivy.uix.behaviors.button import ButtonBehavior
 
@@ -35,7 +35,7 @@ class CamButton(ButtonBehavior,Image):
     def __init__(self, **kwargs):
         super(CamButton,self).__init__(**kwargs)
         self.source = 'source\camera.png'
-        
+
 class LogScreen(Screen):
     def __init__(self, **kw):
         super(LogScreen,self).__init__(**kw)
@@ -101,22 +101,12 @@ class Reader(Screen):
 
 class MainApp(App):
     def build(self):
-
         camera1 = ScreenManager()
-
-        self.S2 = LogScreen(name = 'log')        
-        
+        self.S2 = LogScreen(name = 'log')
         camera1.add_widget(self.S2)
-
         self.S1 = Reader(name = 'camera')
-        
         camera1.add_widget(self.S1)
         camera1.current = 'camera'
-
-        Clock.schedule_interval(self.logs, 1.0/33.0)
-
-
-        
         return camera1
             
     def logs(self,*args):
