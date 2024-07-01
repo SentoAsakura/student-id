@@ -14,6 +14,7 @@ from kivy.uix.button import Button
 from kivy.uix.behaviors.button import ButtonBehavior
 
 from check import logTime
+import dataManage as data
 
 
 
@@ -44,6 +45,8 @@ class LogScreen(Screen):
         logScreen.add_widget(CamButton(size_hint = (.15,.15), on_press = self.changeScreen))
 
         logScreen2 = BoxLayout(orientation='vertical')
+        history = Label(text = data.history())
+        logScreen2.add_widget(history)
         
         self.add_widget(logScreen)
         self.add_widget(logScreen2)

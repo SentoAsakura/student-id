@@ -14,9 +14,10 @@ def find_n_update(id:int):
     try:
         cursor.execute(f"""UPDATE student SET state = '{status}',time = datetime('now','localtime') WHERE id = {id}""")
         connection.commit()
-        
-    finally:
         cursor.execute(f"""SELECT * FROM student WHERE id = {id}""")
+    except:
+        print('An error occured')
+    finally:
         items = cursor.fetchall()
         if len(items) == 0:
             print('Học sinh không tồn tại')
@@ -27,8 +28,12 @@ def history():
     his_cursor = connection.cursor()
     his_cursor.execute("SELECT * FROM history ORDER BY time DESC LIMIT 5")
     items = his_cursor.fetchall()
+    log = ""
     for item in items:
-        print(f'{item[1]} {item[2]}')
+        log+= f'{" ".join(item)}\n'
+    #print(log)
+    return log
 
-# find_n_update(1)
-# history()
+if __name__ == '__main__':
+    find_n_update(99)
+    print(history())
