@@ -9,7 +9,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.screenmanager import ScreenManager,Screen
+from kivy.uix.screenmanager import ScreenManager,Screen, SlideTransition
 from kivy.uix.button import Button
 from kivy.uix.behaviors.button import ButtonBehavior
 
@@ -35,10 +35,25 @@ class CamButton(ButtonBehavior,Image):
     def __init__(self, **kwargs):
         super(CamButton,self).__init__(**kwargs)
         self.source = 'source\camera.png'
+        
+class LogScreen(Screen):
+    def __init__(self, **kw):
+        super(LogScreen,self).__init__(**kw)
+        logScreen = AnchorLayout(anchor_x = 'left', anchor_y='bottom')
 
+        logScreen.add_widget(CamButton(size_hint = (.15,.15), on_press = self.changeScreen))
 
-class MainApp(App):
-    def build(self):
+        logScreen2 = BoxLayout(orientation='vertical')
+        
+        self.add_widget(logScreen)
+        self.add_widget(logScreen2)
+    def changeScreen(self, *args):
+        self.manager.transition.direction = 'down'
+        self.manager.current = 'camera'
+
+class Reader(Screen):
+    def __init__(self, **kw):
+        super(Reader, self).__init__(**kw)
         self.img1 = Image()
         self.img1.fit_mode = 'cover'
         self.img1.size = self.img1.width, 640
@@ -46,76 +61,22 @@ class MainApp(App):
         self.reader = FloatLayout()
         self.reader.add_widget(self.img1)
 
-        
-
-        camera1 = ScreenManager()
-        self.camera1 = camera1
-        self.log = []
-        
-        def Switch(instance,*args):
-
-            state = ''
-            match instance.source:
-                case 'source\Log.png':
-                    state = 'Log'
-                case 'source\camera.png':
-                    state = 'camera'
-
-            self.camera1.current = state
-            transition = ""
-            if state == 'Log':
-                transition = 'up'
-            else:
-                transition = 'down'
-            self.camera1.transition.direction = transition
-            return Switch
-
-        self.S2 = Screen(name = 'Log')
-        logScreen = AnchorLayout(anchor_x = 'left', anchor_y='bottom')
-        #log = Label(text = self.logs())
-        logScreen.add_widget(CamButton(size_hint = (.15,.15), on_press = Switch))
-        #logScreen.add_widget(log)
-        self.logScreen2 = BoxLayout(orientation='vertical')
-        
-        self.S2.add_widget(logScreen)
-        self.S2.add_widget(self.logScreen2)
-            
-        
-        
-        camera1.add_widget(self.S2)
-        self.reader.add_widget(LogButton(size_hint = (.15,.15),on_press = Switch))
-        self.S1 = Screen(name = 'camera')
-        self.S1.add_widget(self.reader)
-        camera1.add_widget(self.S1)
-        camera1.current = 'camera'
-        
-        
+        self.reader.add_widget(LogButton(size_hint = (.15,.15),on_press = self.screenChange))
+        self.add_widget(self.reader)
 
         self.capture = cv2.VideoCapture(0)
-        #cv2.namedWindow("CV2 Image")
+
         Clock.schedule_interval(self.update, 1.0/33.0)
         Clock.schedule_interval(self.read, 1)
-        Clock.schedule_interval(self.logs, 1.0/33.0)
-
-        #Only for emergency situation
-
-        # self.button1 = Label(
-        #     text = log,
-        #     )
-        # self.button1.bind(on_press = self.read)
-        # camera.add_widget(self.button1)
-        
-        return camera1
+    def screenChange(self, *args):
+        self.manager.transition.direction = 'up'
+        self.manager.current = 'log'
     def update(self,*args):
         ret,frame = self.capture.read()
         for code in decode(frame):
             pts = np.array([code.polygon],np.int32)
             pts = pts.reshape((-1,1,2))
             cv2.polylines(frame,[pts],True,(0,255,255),3)
-        #     self.code = code
-            #print(self.code)
-            
-        #cv2.imshow('CV2 Image',frame)
 
         buf1 = cv2.flip(frame, 0)
         buf = buf1.tostring()
@@ -131,21 +92,32 @@ class MainApp(App):
         file = open('log.txt','a',encoding='utf-8')
         ret,frame = self.capture.read()
         for code in decode(frame):
-            # pts = np.array([code.polygon],np.int32)
-            # pts = pts.reshape((-1,1,2))
-            # cv2.polylines(frame,[pts],True,(0,255,255),3)
-            #print(self.code)
             self.data = code.data.decode('utf-8')
             print(self.data)
             file.writelines(f'{str(self.data)} {status} \n')
             file.close()
-            self.log.insert(0,self.data)
-            self.log = self.log[:5]
-            
-            self.logScreen2.add_widget(Label(text =self.log[0],size_hint = (1,.15)))
-            
 
-            
+
+
+class MainApp(App):
+    def build(self):
+
+        camera1 = ScreenManager()
+
+        self.S2 = LogScreen(name = 'log')        
+        
+        camera1.add_widget(self.S2)
+
+        self.S1 = Reader(name = 'camera')
+        
+        camera1.add_widget(self.S1)
+        camera1.current = 'camera'
+
+        Clock.schedule_interval(self.logs, 1.0/33.0)
+
+
+        
+        return camera1
             
     def logs(self,*args):
         filein = open('log.txt','r',encoding='utf-8')
