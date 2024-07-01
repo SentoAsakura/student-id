@@ -88,14 +88,10 @@ class Reader(Screen):
 
 
     def read(self, *args):
-        status = f'{logTime().hour}:{logTime().min}   {logTime().state}'
-        file = open('log.txt','a',encoding='utf-8')
         ret,frame = self.capture.read()
         for code in decode(frame):
             self.data = code.data.decode('utf-8')
             print(self.data)
-            file.writelines(f'{str(self.data)} {status} \n')
-            file.close()
 
 
 

@@ -4,11 +4,11 @@ from check import logTime
 connection = sql.connect('sqlitecloud://ca5rcloqsz.sqlite.cloud:8860?apikey=tlareWaPX2WwzzKjAwjBpkQxIcV1HsFR4Im5rM4fX0g')
 print('Successfully connect to database')
 
-connection.execute('USE DATABASE database.db')
+connection.execute('USE DATABASE database.sqlite')
 
 cursor = connection.cursor()
 
-def find_n_update(id):
+def find_n_update(id:int):
     status = logTime().state
     
     try:
@@ -29,5 +29,3 @@ def history():
     items = his_cursor.fetchall()
     for item in items:
         print(f'{item[1]} {item[2]}')
-find_n_update(1)
-history()
