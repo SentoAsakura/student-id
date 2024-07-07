@@ -92,8 +92,16 @@ class Reader(Screen):
 
     def read(self, *args):
         ret,frame = self.capture.read()
+        out_data = None
         for code in decode(frame):
             self.data = code.data.decode('utf-8')
+            try:
+                out_data = int(self.data)
+            except:
+                print('An error occured')
+            finally:
+                if out_data != None:
+                    data.find_n_update(out_data)
             print(self.data)
 
 

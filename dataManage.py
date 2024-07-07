@@ -1,5 +1,6 @@
 import sqlitecloud as sql
 from check import logTime
+from datetime import datetime, timezone
 
 connection = sql.connect('sqlitecloud://ca5rcloqsz.sqlite.cloud:8860?apikey=tlareWaPX2WwzzKjAwjBpkQxIcV1HsFR4Im5rM4fX0g')
 print('Successfully connect to database')
@@ -12,7 +13,7 @@ def find_n_update(id:int):
     status = logTime().state
     
     try:
-        cursor.execute(f"""UPDATE student SET state = '{status}',time = datetime('now','localtime') WHERE id = {id}""")
+        cursor.execute(f"""UPDATE student SET state = '{status}',time = datetime('{datetime.now()}') WHERE id = {id}""")
         connection.commit()
         cursor.execute(f"""SELECT * FROM student WHERE id = {id}""")
     except:
