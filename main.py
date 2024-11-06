@@ -16,7 +16,7 @@ from kivy.core.audio import SoundLoader
 
 from check import logTime
 import dataManage as data
-soundEff = SoundLoader.load('sound.wav')
+soundEff = SoundLoader.load('source\sound.wav')
 
 
 
