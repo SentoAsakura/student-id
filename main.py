@@ -12,10 +12,11 @@ from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager,Screen
 from kivy.uix.button import Button
 from kivy.uix.behaviors.button import ButtonBehavior
+from kivy.core.audio import SoundLoader
 
 from check import logTime
 import dataManage as data
-
+soundEff = SoundLoader.load('sound.wav')
 
 
 
@@ -102,6 +103,8 @@ class Reader(Screen):
             finally:
                 if out_data != None:
                     data.find_n_update(out_data)
+                soundEff.play()
+
             print(self.data)
 
 

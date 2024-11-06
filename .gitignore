@@ -160,5 +160,4 @@ cython_debug/
 #.idea/
 
 log.txt
-*.png
 *.db
