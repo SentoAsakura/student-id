@@ -16,12 +16,12 @@ def find_n_update(id:int):
     curr_late = 0
     if cursor.fetchone():
         curr_late = cursor.fetchone()[0]
-    # if status == "Trễ":
-    #     if curr_late:
-    #         new_late = int(curr_late) + 1
+    if status == "Trễ":
+        if curr_late:
+            new_late = int(curr_late) + 1
         
-    # else: 
-    #     new_late = int(curr_late)
+    else: 
+        new_late = int(curr_late)
     
     try:
         cursor.execute(f"""UPDATE student SET state = '{status}',time = datetime('{datetime.now()}'),absent = {new_late} WHERE id = {id}""")
