@@ -13,9 +13,7 @@ def find_n_update(id:int):
     status = logTime().state
     new_late = 0
     cursor.execute(f'SELECT absent FROM student where id = {id}')
-    curr_late = 0
-    if cursor.fetchone():
-        curr_late = cursor.fetchone()[0]
+    curr_late : int = int(cursor.fetchone()[0]) | 0
     if status == "Trễ":
         if curr_late:
             new_late = int(curr_late) + 1
@@ -24,7 +22,8 @@ def find_n_update(id:int):
         new_late = int(curr_late)
     
     try:
-        cursor.execute(f"""UPDATE student SET state = '{status}',time = datetime('{datetime.now()}'),absent = {new_late} WHERE id = {id}""")
+        newCurr = connection.cursor()
+        newCurr.execute(f"""UPDATE student SET state = '{status}',time = datetime('{datetime.now()}'),absent = {new_late} WHERE id = {id}""")
         connection.commit()
         cursor.execute(f"""SELECT * FROM student WHERE id = {id}""")
     except:
