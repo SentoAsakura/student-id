@@ -38,7 +38,7 @@ def history():
     items = his_cursor.fetchall()
     log = ""
     for item in items:
-        log+= f'{" ".join(item)}\n'
+        log+= f'{" ".join(item)}\n\n'
     #print(log)
     return log
 
