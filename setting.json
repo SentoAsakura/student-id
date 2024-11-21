@@ -1,4 +1,5 @@
 {
     "mode": "1",
-    "database": "local"
+    "database": "local",
+    "datalink": "sqlitecloud://ca5rcloqsz.sqlite.cloud:8860?apikey=tlareWaPX2WwzzKjAwjBpkQxIcV1HsFR4Im5rM4fX0g"
 }

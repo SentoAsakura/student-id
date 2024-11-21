@@ -5,7 +5,7 @@ setting = json.load(open('setting.json'))
 
 if setting["database"] == 'online':
     import sqlitecloud as sql
-    connection = sql.connect('sqlitecloud://ca5rcloqsz.sqlite.cloud:8860?apikey=tlareWaPX2WwzzKjAwjBpkQxIcV1HsFR4Im5rM4fX0g')
+    connection = sql.connect(setting["datalink"])
     print('Successfully connect to online database')
     connection.execute('USE DATABASE database.sqlite')
 if setting["database"] == 'local':
