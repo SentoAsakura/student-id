@@ -1,11 +1,18 @@
-import sqlitecloud as sql
 from check import logTime
 from datetime import datetime, timezone
+import json
+setting = json.load(open('setting.json'))
 
-connection = sql.connect('sqlitecloud://ca5rcloqsz.sqlite.cloud:8860?apikey=tlareWaPX2WwzzKjAwjBpkQxIcV1HsFR4Im5rM4fX0g')
-print('Successfully connect to database')
+if setting["database"] == 'online':
+    import sqlitecloud as sql
+    connection = sql.connect('sqlitecloud://ca5rcloqsz.sqlite.cloud:8860?apikey=tlareWaPX2WwzzKjAwjBpkQxIcV1HsFR4Im5rM4fX0g')
+    print('Successfully connect to online database')
+    connection.execute('USE DATABASE database.sqlite')
+if setting["database"] == 'local':
+    import sqlite3 as sql
+    connection = sql.connect('database.sqlite')
+    print('Successfully connect to local database')
 
-connection.execute('USE DATABASE database.sqlite')
 
 cursor = connection.cursor()
 
@@ -41,7 +48,7 @@ def history():
     items = his_cursor.fetchall()
     log = ""
     for item in items:
-        log+= f'{" ".join(item)}\n\n'
+        log+= f'{" ".join(str(item))}\n\n'
     #print(log)
     return log
 
