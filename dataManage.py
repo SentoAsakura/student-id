@@ -44,11 +44,11 @@ def find_n_update(id:int):
 
 def history():
     his_cursor = connection.cursor()
-    his_cursor.execute("SELECT * FROM history ORDER BY time DESC LIMIT 5")
+    his_cursor.execute("SELECT * FROM history ORDER BY time ASC LIMIT 5")
     items = his_cursor.fetchall()
     log = ""
     for item in items:
-        log+= f'{" ".join(str(item))}\n\n'
+        log+= f'{"".join(str(item))}\n\n'
     #print(log)
     return log
 
