@@ -13,10 +13,14 @@ class logTime():
     def check(self, mode):
         match mode:
             case '1':
-                if self.hour >= mode1[0] and self.min>mode1[1]:
+                if self.hour == mode1[0] and self.min>mode1[1]:
+                    return 'Trễ'
+                elif self.hour >= mode1[2]:
                     return 'Trễ'
                 else: return 'Đúng giờ'
             case '2':
-                if self.hour >= mode2[0] and self.min>mode2[1]:
+                if self.hour == mode2[0] and self.min>mode2[1]:
+                    return 'Trễ'
+                elif self.hour >= mode2[2]:
                     return 'Trễ'
                 else: return 'Đúng giờ'

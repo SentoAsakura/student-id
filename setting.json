@@ -1,7 +1,7 @@
 {
-    "mode": "1",
+    "mode": "2",
     "database": "local",
     "datalink": "sqlitecloud://ca5rcloqsz.sqlite.cloud:8860?apikey=tlareWaPX2WwzzKjAwjBpkQxIcV1HsFR4Im5rM4fX0g",
-    "mode1": [6,45],
-    "mode2": [12,45]
+    "mode1": [6,45,7],
+    "mode2": [12,45,13]
 }
