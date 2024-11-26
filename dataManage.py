@@ -20,7 +20,7 @@ def find_n_update(id:int):
     status = logTime().state
     new_late = 0
     cursor.execute(f'SELECT absent FROM student where id = {id}')
-    curr_late : int = int(cursor.fetchone()[0]) | 0
+    curr_late = cursor.fetchone()[0] | 0
     if status == "Trễ":
         if curr_late:
             new_late = int(curr_late) + 1
